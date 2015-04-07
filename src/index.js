@@ -8,10 +8,12 @@ var virtAndroid = exports,
     root = null;
 
 
+virtAndroid.androidInterface = null;
+
 virtAndroid.render = function(view) {
     if (root === null) {
         root = new virt.Root();
-        root.adaptor = new AndroidAdaptor(root);
+        root.adaptor = new AndroidAdaptor(root, virtAndroid.androidInterface);
 
         ComponentPrototype.emitMessage = emitMessage;
         ComponentPrototype.onMessage = onMessage;

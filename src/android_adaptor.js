@@ -5,8 +5,8 @@ var MessengerAndroid = require("messenger_android"),
 module.exports = AndroidAdaptor;
 
 
-function AndroidAdaptor(root) {
-    var messenger = new MessengerAndroid(),
+function AndroidAdaptor(root, androidInterface) {
+    var messenger = new MessengerAndroid(androidInterface),
         eventManager = root.eventManager,
         events = eventManager.events;
 
