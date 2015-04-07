@@ -3,8 +3,6 @@ var virt = require("virt"),
 
 
 var virtAndroid = exports,
-
-    ComponentPrototype = virt.Component.prototype,
     root = null;
 
 
@@ -14,13 +12,11 @@ virtAndroid.render = function(view) {
     if (root === null) {
         root = new virt.Root();
         root.adaptor = new AndroidAdaptor(root, virtAndroid.androidInterface);
-
-        ComponentPrototype.emitMessage = emitMessage;
-        ComponentPrototype.onMessage = onMessage;
-        ComponentPrototype.offMessage = offMessage;
     }
 
-    return root.render(view);
+    root.render(view);
+
+    return root;
 };
 
 virtAndroid.unmount = function() {
@@ -29,15 +25,3 @@ virtAndroid.unmount = function() {
         root = null;
     }
 };
-
-function emitMessage(name, data, callback) {
-    return this.__node.root.adaptor.messenger.emit(name, data, callback);
-}
-
-function onMessage(name, callback) {
-    return this.__node.root.adaptor.messenger.on(name, callback);
-}
-
-function offMessage(name, callback) {
-    return this.__node.root.adaptor.messenger.off(name, callback);
-}

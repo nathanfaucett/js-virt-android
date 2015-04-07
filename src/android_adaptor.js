@@ -15,7 +15,7 @@ function AndroidAdaptor(root, androidInterface) {
 
     eventManager.propNameToTopLevel = consts.propNameToTopLevel;
 
-    messenger.on("handle_event_dispatch", function(data, callback) {
+    messenger.on("__AndroidAdaptor:handleEventDispatch__", function(data, callback) {
         var childHash = root.childHash,
             topLevelType = data.topLevelType,
             targetId = data.targetId,
@@ -32,6 +32,6 @@ function AndroidAdaptor(root, androidInterface) {
     });
 
     this.handle = function(transaction, callback) {
-        messenger.emit("handle_transaction", transaction, callback);
+        messenger.emit("__AndroidAdaptor:handleTransaction__", transaction, callback);
     };
 }
