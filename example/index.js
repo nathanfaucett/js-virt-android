@@ -1659,16 +1659,13 @@ NodePrototype.mountComponent = function() {
         this.isTopLevel = true;
     }
 
-    props = currentView.props;
+    props = this.__processProps(currentView.props);
     children = currentView.children;
-    context = currentView.__context;
+    context = this.__processContext(currentView.__context);
 
     component = new ComponentClass(props, children, context);
 
     this.component = component;
-
-    props = this.__processProps(props);
-    context = this.__processContext(context);
 
     component.__node = this;
     component.props = props;
@@ -1925,7 +1922,7 @@ NodePrototype.renderView = function() {
 
 NodePrototype.__checkTypes = function(propTypes, props) {
     var localHas = has,
-        displayName = this.component.displayName,
+        displayName = this.__getName(),
         propName, error;
 
     if (propTypes) {
@@ -2009,7 +2006,7 @@ NodePrototype.__processChildContext = function(currentContext) {
 
         if (childContextTypes) {
             localHas = has;
-            displayName = component.displayName;
+            displayName = this.__getName();
 
             for (contextName in childContext) {
                 if (!localHas(childContextTypes, contextName)) {
@@ -2041,6 +2038,18 @@ NodePrototype.__detachRefs = function() {
 
     if (isString(ref)) {
         detachRef(ref, view.__owner);
+    }
+};
+
+NodePrototype.__getName = function() {
+    var type = this.currentView.type,
+        constructor;
+
+    if (isString(type)) {
+        return type;
+    } else {
+        constructor = this.component && this.component.constructor;
+        return type.displayName || (constructor && constructor.displayName) || null;
     }
 };
 
