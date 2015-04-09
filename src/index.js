@@ -12,12 +12,12 @@ var virtAndroid = exports,
     root = null;
 
 
-virtAndroid.androidInterface = null;
+virtAndroid.socket = null;
 
 virtAndroid.render = function(view) {
     if (root === null) {
         root = new virt.Root();
-        root.adaptor = new AndroidAdaptor(root, virtAndroid.androidInterface);
+        root.adaptor = new AndroidAdaptor(root, virtAndroid.socket);
     }
 
     root.render(view);

@@ -11,6 +11,9 @@
     "virt-android",
     "virt-android.js"
   ],
+  "scripts": {
+    "example": "comn -f example/src/index.js -o example/index.js"
+  },
   "author": "Nathan Faucett",
   "license": "BSD-2-Clause",
   "readmeFilename": "README.md",
@@ -24,7 +27,7 @@
     "for_each": "git://github.com/nathanfaucett/for_each",
     "is_primitive": "git://github.com/nathanfaucett/is_primitive",
     "key_mirror": "git://github.com/nathanfaucett/key_mirror",
-    "messenger_android": "git://github.com/nathanfaucett/messenger_android",
+    "messenger_websocket": "git://github.com/nathanfaucett/messenger_websocket",
     "some": "git://github.com/nathanfaucett/some",
     "virt": "git://github.com/nathanfaucett/virt"
   }
