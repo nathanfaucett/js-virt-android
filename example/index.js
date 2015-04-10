@@ -2847,10 +2847,10 @@ var virt = require(1),
     AndroidAdaptor = require(58);
 
 
-require(62);
-require(65);
+require(63);
 require(66);
 require(67);
+require(68);
 
 
 var virtAndroid = exports,
@@ -2881,15 +2881,16 @@ virtAndroid.unmount = function() {
 },
 function(require, exports, module, global) {
 
-var MessengerWebSocket = require(59),
-    consts = require(60);
+var Messenger = require(59),
+    MessengerWebSocketAdaptor = require(60),
+    consts = require(61);
 
 
 module.exports = AndroidAdaptor;
 
 
 function AndroidAdaptor(root, socket) {
-    var messenger = new MessengerWebSocket(socket),
+    var messenger = new Messenger(new MessengerWebSocketAdaptor(socket)),
         eventManager = root.eventManager,
         events = eventManager.events;
 
@@ -2923,72 +2924,93 @@ function AndroidAdaptor(root, socket) {
 },
 function(require, exports, module, global) {
 
-module.exports = MessengerWebSocket;
+var MESSENGER_ID = 0,
+    MessengerPrototype;
 
 
-function MessengerWebSocket(socket) {
-    var MESSAGE_ID = 0,
-        listeners = {},
-        messages = {};
+module.exports = Messenger;
 
-    socket.on("message", function onMessage(data) {
-        var message = JSON.parse(data),
-            id = message.id,
-            name = message.name,
-            callback = messages[id];
 
-        if (name) {
-            if (listeners[name]) {
-                emit(listeners[name], message.data, function callback(error, data) {
-                    socket.send(JSON.stringify({
-                        id: id,
-                        error: error || undefined,
-                        data: data
-                    }));
-                });
-            }
-        } else {
-            if (callback) {
-                callback(message.error, message.data);
-                delete messages[id];
-            }
-        }
+function Messenger(adaptor) {
+    var _this = this;
+
+    this.__id = (MESSENGER_ID++).toString(36);
+    this.__messageId = 0;
+    this.__callbacks = {};
+    this.__listeners = {};
+
+    this.__adaptor = adaptor;
+
+    adaptor.addMessageListener(function onMessage(data) {
+        _this.onMessage(data);
     });
+}
+MessengerPrototype = Messenger.prototype;
 
-    this.emit = function(name, data, callback) {
-        var id = MESSAGE_ID++;
+MessengerPrototype.onMessage = function(message) {
+    var id = message.id,
+        name = message.name,
+        callbacks = this.__callbacks,
+        callback = callbacks[id],
+        listeners, adaptor;
 
-        if (callback) {
-            messages[id] = callback;
+    if (name) {
+        listeners = this.__listeners;
+        adaptor = this.__adaptor;
+
+        if (listeners[name]) {
+            emit(listeners[name], message.data, function callback(error, data) {
+                adaptor.postMessage({
+                    id: id,
+                    error: error || undefined,
+                    data: data
+                });
+            });
         }
+    } else {
+        if (callback && isMatch(id, this.__id)) {
+            callback(message.error, message.data);
+            delete callbacks[id];
+        }
+    }
+};
 
-        socket.send(JSON.stringify({
-            id: id,
-            name: name,
-            data: data
-        }));
-    };
+MessengerPrototype.emit = function(name, data, callback) {
+    var id = this.__id + "-" + (this.__messageId++).toString(36);
 
-    this.on = function(name, callback) {
-        var listener = listeners[name] || (listeners[name] = []);
-        listener[listener.length] = callback;
-    };
+    if (callback) {
+        this.__callbacks[id] = callback;
+    }
 
-    this.off = function(name, callback) {
-        var listener = listeners[name],
-            i;
+    this.__adaptor.postMessage({
+        id: id,
+        name: name,
+        data: data
+    });
+};
 
-        if (listener) {
-            i = listener.length;
+MessengerPrototype.on = function(name, callback) {
+    var listeners = this.__listeners,
+        listener = listeners[name] || (listeners[name] = []);
 
-            while (i--) {
-                if (listener[i] === callback) {
-                    listener.splice(i, 1);
-                }
+    listener[listener.length] = callback;
+};
+
+MessengerPrototype.off = function(name, callback) {
+    var listeners = this.__listeners,
+        listener = listeners[name],
+        i;
+
+    if (listener) {
+        i = listener.length;
+
+        while (i--) {
+            if (listener[i] === callback) {
+                listener.splice(i, 1);
             }
         }
-    };
-}
+    }
+};
 
 function emit(listeners, data, callback) {
     var index = 0,
@@ -3013,11 +3035,40 @@ function emit(listeners, data, callback) {
     next(undefined, data);
 }
 
+function isMatch(messageId, id) {
+    return messageId.split("-")[0] === id;
+}
+
 
 },
 function(require, exports, module, global) {
 
-var forEach = require(61),
+var MessengerWebSocketAdaptorPrototype;
+
+
+module.exports = MessengerWebSocketAdaptor;
+
+
+function MessengerWebSocketAdaptor(socket) {
+    this.__socket = socket;
+}
+MessengerWebSocketAdaptorPrototype = MessengerWebSocketAdaptor.prototype;
+
+MessengerWebSocketAdaptorPrototype.addMessageListener = function(callback) {
+    this.__socket.onmessage = function onMessage(data) {
+        callback(JSON.parse(data));
+    };
+};
+
+MessengerWebSocketAdaptorPrototype.postMessage = function(data) {
+    this.__socket.send(JSON.stringify(data));
+};
+
+
+},
+function(require, exports, module, global) {
+
+var forEach = require(62),
     keyMirror = require(27);
 
 
@@ -3130,8 +3181,8 @@ function(require, exports, module, global) {
 
 var process = require(39);
 var virt = require(1),
-    some = require(63),
-    isNotPrimitive = require(64);
+    some = require(64),
+    isNotPrimitive = require(65);
 
 
 var View = virt.View,
@@ -3267,8 +3318,8 @@ function(require, exports, module, global) {
 
 var process = require(39);
 var virt = require(1),
-    some = require(63),
-    isNotPrimitive = require(64);
+    some = require(64),
+    isNotPrimitive = require(65);
 
 
 var View = virt.View,
