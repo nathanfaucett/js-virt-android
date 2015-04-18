@@ -29,6 +29,13 @@ InputPrototype.getValue = function(callback) {
     }, callback);
 };
 
+InputPrototype.setValue = function(value, callback) {
+    this.emitMessage("__Input:setValue__", {
+        id: this.getId(),
+        value: value
+    }, callback);
+};
+
 InputPrototype.render = function() {
     return new View("Input", null, null, this.props, this.children, null, null);
 };

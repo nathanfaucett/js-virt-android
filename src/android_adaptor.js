@@ -6,8 +6,8 @@ var Messenger = require("messenger"),
 module.exports = AndroidAdaptor;
 
 
-function AndroidAdaptor(root, socket) {
-    var messenger = new Messenger(new MessengerWebSocketAdaptor(socket)),
+function AndroidAdaptor(root, socket, attachSocketMessage, sendSocketMessage) {
+    var messenger = new Messenger(new MessengerWebSocketAdaptor(socket, attachSocketMessage, sendSocketMessage)),
         eventManager = root.eventManager,
         events = eventManager.events;
 
