@@ -13,11 +13,17 @@ var virtAndroid = exports,
 
 
 virtAndroid.socket = null;
+virtAndroid.attachSocketMessage = null;
+virtAndroid.sendSocketMessage = null;
 
 virtAndroid.render = function(view) {
     if (root === null) {
         root = new virt.Root();
-        root.adaptor = new AndroidAdaptor(root, virtAndroid.socket);
+        root.adaptor = new AndroidAdaptor(root,
+            virtAndroid.socket,
+            virtAndroid.attachSocketMessage,
+            virtAndroid.sendSocketMessage
+        );
     }
 
     root.render(view);
