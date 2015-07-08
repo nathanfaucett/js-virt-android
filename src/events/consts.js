@@ -1,9 +1,11 @@
-var forEach = require("for_each"),
+var map = require("map"),
+    forEach = require("for_each"),
     keyMirror = require("key_mirror");
 
 
 var consts = exports,
 
+    topLevelToEvent = consts.topLevelToEvent = {},
     propNameToTopLevel = consts.propNameToTopLevel = {},
 
     eventTypes = [
@@ -36,6 +38,7 @@ var consts = exports,
         "topMouseMove",
         "topMouseOut",
         "topMouseOver",
+        "topMouseEnter",
         "topMouseUp",
         "topPaste",
         "topReset",
@@ -52,10 +55,20 @@ var consts = exports,
 
 consts.topLevelTypes = keyMirror(eventTypes);
 
+consts.propNames = map(eventTypes, replaceTopWithOn);
+
 forEach(eventTypes, function(str) {
     propNameToTopLevel[replaceTopWithOn(str)] = str;
 });
 
+forEach(eventTypes, function(str) {
+    topLevelToEvent[str] = removeTop(str).toLowerCase();
+});
+
 function replaceTopWithOn(str) {
     return str.replace(/^top/, "on");
+}
+
+function removeTop(str) {
+    return str.replace(/^top/, "");
 }

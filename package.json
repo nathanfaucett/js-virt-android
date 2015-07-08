@@ -20,16 +20,14 @@
   "devDependencies": {
     "grunt": "^0.4.5",
     "grunt-contrib-jshint": "^0.10.0",
-    "grunt-jsbeautifier": "^0.2.7",
-    "mocha": "^2.1.0"
+    "grunt-jsbeautifier": "^0.2.7"
   },
   "dependencies": {
     "for_each": "git://github.com/nathanfaucett/for_each",
-    "is_primitive": "git://github.com/nathanfaucett/is_primitive",
     "key_mirror": "git://github.com/nathanfaucett/key_mirror",
+    "map": "git://github.com/nathanfaucett/map.git",
     "messenger": "git://github.com/nathanfaucett/messenger",
-    "messenger_websocket_adaptor": "git://github.com/nathanfaucett/messenger_websocket_adaptor",
-    "some": "git://github.com/nathanfaucett/some",
+    "messenger_websocket_adapter": "git://github.com/nathanfaucett/messenger_websocket_adapter",
     "virt": "git://github.com/nathanfaucett/virt"
   }
 }

@@ -1,13 +1,13 @@
 var Messenger = require("messenger"),
-    MessengerWebSocketAdaptor = require("messenger_websocket_adaptor"),
-    consts = require("./consts");
+    MessengerWebSocketAdapter = require("messenger_websocket_adapter"),
+    consts = require("./events/consts");
 
 
-module.exports = AndroidAdaptor;
+module.exports = AndroidAdapter;
 
 
-function AndroidAdaptor(root, socket, attachSocketMessage, sendSocketMessage) {
-    var messenger = new Messenger(new MessengerWebSocketAdaptor(socket, attachSocketMessage, sendSocketMessage)),
+function AndroidAdapter(root, socket, attachSocketMessage, sendSocketMessage) {
+    var messenger = new Messenger(new MessengerWebSocketAdapter(socket, attachSocketMessage, sendSocketMessage)),
         eventManager = root.eventManager,
         events = eventManager.events;
 
@@ -16,7 +16,7 @@ function AndroidAdaptor(root, socket, attachSocketMessage, sendSocketMessage) {
 
     eventManager.propNameToTopLevel = consts.propNameToTopLevel;
 
-    messenger.on("__AndroidAdaptor:handleEventDispatch__", function(data, callback) {
+    messenger.on("__AndroidAdapter:handleEventDispatch__", function(data, callback) {
         var childHash = root.childHash,
             topLevelType = data.topLevelType,
             targetId = data.targetId,
@@ -29,10 +29,10 @@ function AndroidAdaptor(root, socket, attachSocketMessage, sendSocketMessage) {
             eventType[targetId](nativeEvent);
         }
 
-        callback(undefined);
+        callback();
     });
 
     this.handle = function(transaction, callback) {
-        messenger.emit("__AndroidAdaptor:handleTransaction__", transaction, callback);
+        messenger.emit("__AndroidAdapter:handleTransaction__", transaction, callback);
     };
 }

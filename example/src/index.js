@@ -12,9 +12,13 @@ var socket = {
     }
 };
 
-virtAndroid.socket = socket;
-
-virtAndroid.render(virt.createView("View",
-    virt.createView("Input"),
-    virt.createView("Button")
-));
+virtAndroid.render(
+    virt.createView("div",
+        virt.createView("input", {
+            value: "Hello World!"
+        }),
+        virt.createView("button", "Click Me!")
+    ), {
+        socket: socket
+    }
+);
