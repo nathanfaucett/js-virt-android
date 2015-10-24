@@ -6,21 +6,15 @@ var virt = require("virt"),
 module.exports = render;
 
 
-function render(view, options) {
+function render(view, callback, socket, attachMessage, sendMessage) {
     var currentRoot = root.current;
 
     if (currentRoot === null) {
         root.current = currentRoot = new virt.Root();
-        options = options || {};
-
-        currentRoot.adapter = new AndroidAdapter(currentRoot,
-            options.socket,
-            options.attachSocketMessage,
-            options.sendSocketMessage
-        );
+        currentRoot.adapter = new AndroidAdapter(currentRoot, socket, attachMessage, sendMessage);
     }
 
-    currentRoot.render(view);
+    currentRoot.render(view, callback);
 
     return currentRoot;
 }

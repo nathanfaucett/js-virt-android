@@ -11,11 +11,8 @@
     "virt-android",
     "virt-android.js"
   ],
-  "scripts": {
-    "example": "comn -f example/src/index.js -o example/index.js"
-  },
   "author": "Nathan Faucett",
-  "license": "BSD-2-Clause",
+  "license": "MIT",
   "readmeFilename": "README.md",
   "devDependencies": {
     "grunt": "^0.4.5",
@@ -23,11 +20,11 @@
     "grunt-jsbeautifier": "^0.2.7"
   },
   "dependencies": {
-    "for_each": "git://github.com/nathanfaucett/for_each",
-    "key_mirror": "git://github.com/nathanfaucett/key_mirror",
-    "map": "git://github.com/nathanfaucett/map.git",
-    "messenger": "git://github.com/nathanfaucett/messenger",
-    "messenger_websocket_adapter": "git://github.com/nathanfaucett/messenger_websocket_adapter",
-    "virt": "git://github.com/nathanfaucett/virt"
+    "array-for_each": "git://github.com/nathanfaucett/array-for_each.git",
+    "key_mirror": "git://github.com/nathanfaucett/key_mirror.git",
+    "array-map": "git://github.com/nathanfaucett/array-map.git",
+    "messenger": "git://github.com/nathanfaucett/messenger.git",
+    "messenger_websocket_adapter": "git://github.com/nathanfaucett/messenger_websocket_adapter.git",
+    "virt": "git://github.com/nathanfaucett/virt.git"
   }
 }

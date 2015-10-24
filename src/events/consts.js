@@ -1,5 +1,5 @@
-var map = require("map"),
-    forEach = require("for_each"),
+var arrayMap = require("array-map"),
+    arrayForEach = require("array-for_each"),
     keyMirror = require("key_mirror");
 
 
@@ -40,8 +40,10 @@ var consts = exports,
         "topMouseOver",
         "topMouseEnter",
         "topMouseUp",
+        "topOrientationChange",
         "topPaste",
         "topReset",
+        "topResize",
         "topScroll",
         "topSelectionChange",
         "topSubmit",
@@ -55,13 +57,13 @@ var consts = exports,
 
 consts.topLevelTypes = keyMirror(eventTypes);
 
-consts.propNames = map(eventTypes, replaceTopWithOn);
+consts.propNames = arrayMap(eventTypes, replaceTopWithOn);
 
-forEach(eventTypes, function(str) {
+arrayForEach(eventTypes, function(str) {
     propNameToTopLevel[replaceTopWithOn(str)] = str;
 });
 
-forEach(eventTypes, function(str) {
+arrayForEach(eventTypes, function(str) {
     topLevelToEvent[str] = removeTop(str).toLowerCase();
 });
 

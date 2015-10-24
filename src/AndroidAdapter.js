@@ -6,8 +6,8 @@ var Messenger = require("messenger"),
 module.exports = AndroidAdapter;
 
 
-function AndroidAdapter(root, socket, attachSocketMessage, sendSocketMessage) {
-    var messenger = new Messenger(new MessengerWebSocketAdapter(socket, attachSocketMessage, sendSocketMessage)),
+function AndroidAdapter(root, socket, attachMessage, sendMessage) {
+    var messenger = new Messenger(new MessengerWebSocketAdapter(socket, attachMessage, sendMessage)),
         eventManager = root.eventManager,
         events = eventManager.events;
 
@@ -16,7 +16,7 @@ function AndroidAdapter(root, socket, attachSocketMessage, sendSocketMessage) {
 
     eventManager.propNameToTopLevel = consts.propNameToTopLevel;
 
-    messenger.on("__AndroidAdapter:handleEventDispatch__", function(data, callback) {
+    messenger.on("virt.android.handleEventDispatch", function(data, callback) {
         var childHash = root.childHash,
             topLevelType = data.topLevelType,
             targetId = data.targetId,
@@ -33,6 +33,6 @@ function AndroidAdapter(root, socket, attachSocketMessage, sendSocketMessage) {
     });
 
     this.handle = function(transaction, callback) {
-        messenger.emit("__AndroidAdapter:handleTransaction__", transaction, callback);
+        messenger.emit("virt.android.handleTransaction", transaction, callback);
     };
 }
