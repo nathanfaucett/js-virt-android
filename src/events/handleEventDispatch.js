@@ -1,6 +1,5 @@
 var virt = require("@nathanfaucett/virt"),
-    isNullOrUndefined = require("@nathanfaucett/is_null_or_undefined"),
-    getNodeById = require("../utils/getNodeById");
+    isNullOrUndefined = require("@nathanfaucett/is_null_or_undefined");
 
 
 var traverseAncestors = virt.traverseAncestors;
@@ -39,7 +38,6 @@ function handleEventDispatch(childHash, events, topLevelType, targetId, event) {
             var ret;
 
             if (eventType[currentTargetId]) {
-                event.currentTarget = getNodeById(currentTargetId);
                 event.componentTarget = target;
                 event.currentComponentTarget = childHash[currentTargetId].component;
                 ret = eventType[currentTargetId](event);

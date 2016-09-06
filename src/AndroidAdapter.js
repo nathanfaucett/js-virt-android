@@ -1,8 +1,8 @@
 var extend = require("@nathanfaucett/extend"),
     Messenger = require("@nathanfaucett/messenger"),
-    MessengerAndroidAdapter = require("@nathanfaucett/messenger_websocket_adapter"),
-    consts = require("../events/consts"),
-    eventClassMap = require("../events/eventClassMap");
+    MessengerWebSocketAdapter = require("@nathanfaucett/messenger_websocket_adapter"),
+    consts = require("./events/consts"),
+    eventClassMap = require("./events/eventClassMap");
 
 
 module.exports = AndroidAdapter;
@@ -16,11 +16,6 @@ function AndroidAdapter(root, socket, attachMessage, sendMessage) {
         viewport = {
             currentScrollLeft: 0,
             currentScrollTop: 0
-        },
-        eventHandler = {
-            window: global,
-            document: global,
-            viewport: viewport
         },
 
         events = eventManager.events;
@@ -42,11 +37,9 @@ function AndroidAdapter(root, socket, attachMessage, sendMessage) {
             events,
             topLevelType,
             data.targetId,
-            eventClassMap[topLevelType].getPooled(data.nativeEvent, eventHandler)
+            eventClassMap[topLevelType].getPooled(data.nativeEvent, viewport)
         );
 
         callback();
     });
-
-    registerNativeComponents(root, nativeDOMComponents);
 }
